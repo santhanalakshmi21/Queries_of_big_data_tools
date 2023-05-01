@@ -1,0 +1,100 @@
+step 1. create a Emp.txt file and store the table data.
+
+1~sachin~chennai~100
+2~Gaurav~Pune~200
+3~Manish~Chennai~500
+
+step 2: Check the file location.
+[cloudera@quickstart ~]$ ls
+cloudera-manager  eclipse                     f2.txt    Pictures
+cm_api.py         Emp.txt                     kerberos  Public
+..........
+
+step 3: Check the file contents
+          
+[cloudera@quickstart ~]$ cat Emp.txt
+1~sachin~chennai~100
+2~Gaurav~Pune~200
+3~Manish~Chennai~500
+
+step 4: move the file to HDFS
+
+[cloudera@quickstart ~]$ hadoop fs -put Emp.txt
+put: `Emp.txt': File exists
+
+step 5: Enter hive command to execute hive queries
+[cloudera@quickstart ~]$ hive
+
+Logging initialized using configuration in
+file:/etc/hive/conf.dist/hive-log4j.properties
+WARNING: Hive CLI is deprecated and migration to Beeline is recommended.
+
+step 6: Display databases.
+hive> show databases;
+OK
+default
+orgstn
+Time taken: 1.885 seconds, Fetched: 2 row(s)
+
+step 6: create database.
+hive> create database DB1;
+OK
+Time taken: 3.73 seconds
+hive> show databases;
+OK
+db1
+default
+orgstn
+Time taken: 0.103 seconds, Fetched: 3 row(s)
+
+step 7: use database.
+hive> use DB1;
+OK
+Time taken: 0.189 seconds
+
+step 8: Display tables.Table not available as it is not yet created.
+hive> show tables;
+OK
+Time taken: 0.098 seconds
+
+step 9: create table
+hive> create table Emptable(id int,name string,city string,score int)
+    > row format delimited
+    > fields terminated by '~';
+OK
+Time taken: 0.693 seconds
+hive> show tables;
+OK
+emptable
+Time taken: 0.042 seconds, Fetched: 1 row(s)
+
+step 10: Display emptable.No data is available initially.
+hive> select *from emptable;
+OK
+Time taken: 1.181 seconds
+
+    > desc emptable;
+OK
+id                      int                     
+name                    string                 
+city                    string                 
+score                   int                     
+Time taken: 0.248 seconds, Fetched: 4 row(s)
+
+step 11: load data from Emp.txt to emptable.
+hive> load data local inpath 'Emp.txt' overwrite into table emptable;
+Loading data to table db1.emptable
+Table db1.emptable stats: [numFiles=1, numRows=0, totalSize=61, rawDataSize=0]
+OK
+Time taken: 1.869 seconds
+
+step 12: Disply the table contents.
+hive> select *from Emptable;
+OK
+1       sachin  chennai 100
+2       Gaurav  Pune    200
+3       Manish  Chennai 500
+NULL    NULL    NULL    NULL
+Time taken: 0.082 seconds, Fetched: 4 row(s)
+hive>
+
