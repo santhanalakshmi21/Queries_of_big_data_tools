@@ -1,0 +1,21 @@
+
+pig
+lines= LOAD '/NOTICE.txt' AS (line:chararray);
+
+words= FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) as word;
+
+grunt> words= FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) as word;
+
+grunt> describe words;
+
+words: {word: chararray}
+
+grunt> grouped= GROUP words BY word;
+
+grunt> describe grouped;
+
+grouped: {group: chararray,words: {(word: chararray)}}
+
+grunt>wordcount = FOREACH grouped GENERATE group,COUNT(words);
+
+grunt> dump wordcount;
