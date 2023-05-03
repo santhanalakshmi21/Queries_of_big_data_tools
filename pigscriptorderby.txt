@@ -1,0 +1,15 @@
+
+pig
+A= LOAD 'emp.txt' USING PigStorage(',') AS (id:int,name:chararray,age:int);
+
+studs= FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) as word;
+
+grunt> describe studs;
+
+grunt>studsort = ORDER studs BY age DESC;
+
+grunt> dump studsort;
+
+explain studsort;
+
+illustrate studsort;
